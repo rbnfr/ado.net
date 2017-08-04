@@ -11,7 +11,15 @@ namespace ado.net
     {
         static void Main(string[] args)
         {
-            var connection = new SqlConnection("Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            // Con la @ que hay delante de las comillas se permite un string multilinea apra que sea más claro de leer. También se usa para poder poner caracteres de escape.
+            var connection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;
+                                                Initial Catalog=master;
+                                                Integrated Security=True;
+                                                Connect Timeout=30;
+                                                Encrypt=False;
+                                                TrustServerCertificate=True;
+                                                ApplicationIntent=ReadWrite;
+                                                MultiSubnetFailover=False");
 
             try
             {
