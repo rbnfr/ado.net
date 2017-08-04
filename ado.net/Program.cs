@@ -12,15 +12,19 @@ namespace ado.net
         static void Main(string[] args)
         {
             // Con la @ que hay delante de las comillas se permite un string multilinea apra que sea más claro de leer. También se usa para poder poner caracteres de escape.
-            var connection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;
-                                                Initial Catalog=pizzeria;
+            // Con "using" nos ahorramos el finally, que lo usábamos para llamar a dispose o a close, pero using llama a dispose automáticamente. El try catch es necesario porque using no controla excepciones.
+            using (var connection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;
+                                                Initial Catalog=mister;
                                                 Integrated Security=True;
                                                 Connect Timeout=30;
                                                 Encrypt=False;
                                                 TrustServerCertificate=True;
                                                 ApplicationIntent=ReadWrite;
-                                                MultiSubnetFailover=False");
-
+                                                MultiSubnetFailover=False"))
+            {
+                connection.Open(); // Si no se puede conectar, hay una excepción no controlada, es necesario el try catch.
+            }
+            /*
             try
             {
                 connection.Open();
@@ -43,7 +47,7 @@ namespace ado.net
                     Console.ReadLine();
                 }
                 //connection.Dispose(); // Dispose es una interfaz de tipo idisposable --> Interfaz de marcado, dice al sistema "se va a ejecutar esto, consume tanto". Se usa para hacer algo que va a consumir recursos. Responsable de que cualquier cosa que consuma un recurso. Connection.dispose cierra y libera los recursos.
-            }
+            }*/
         }
     }
 }
