@@ -13,7 +13,7 @@ namespace ado.net
         static void Main(string[] args)
         {
             var connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=pizzeria;Integrated Security=True;  Connect Timeout=30;encrypt = false;trustservercertificate = true;  applicationintent = readwrite; multisubnetfailover = false";
-            //// Crear tabla
+            // Crear tabla
             //var table = new CreateTable();
             //table.createTable("Pizzas", connectionString);
 
@@ -26,16 +26,16 @@ namespace ado.net
 
                 SqlTransaction beginTransaction = connection.BeginTransaction("Transaction");
 
+                // Se inicializa la propiedad transacción del comando.
                 command.Connection = connection;
                 command.Transaction = beginTransaction;
                 try
                 {
                     command.CommandText = "INSERT into Pizzas (Name, Price) VALUES ('Barbacoa', 5)";
                     command.ExecuteNonQuery();
-                    command.CommandText = "INSERT into Pizzas (Name, Price) VALUES ('Marinera', 2)";
-                    command.ExecuteNonQuery();
 
                     beginTransaction.Commit();
+                    connection.Close();
                     Console.WriteLine("Success");
                     //Console.ReadLine();
                 }
