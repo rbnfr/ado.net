@@ -22,6 +22,8 @@ namespace ado.net
             {
                 connection.Open();
 
+
+
                 SqlCommand command = connection.CreateCommand();
 
                 SqlTransaction beginTransaction = connection.BeginTransaction("Transaction");
