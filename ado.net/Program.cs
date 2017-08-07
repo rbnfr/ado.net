@@ -12,37 +12,48 @@ namespace ado.net
     {
         static void Main(string[] args)
         {
-            
+            var connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=pizzeria;Integrated Security=True;  Connect Timeout=30;encrypt = false;trustservercertificate = true;  applicationintent = readwrite; multisubnetfailover = false";
+            //// Crear tabla
+            //var table = new CreateTable();
+            //table.createTable("Pizzas", connectionString);
 
-            // Con la @ que hay delante de las comillas se permite un string multilinea apra que sea más claro de leer. También se usa para poder poner caracteres de escape.
-            // Con "using" nos ahorramos el finally, que lo usábamos para llamar a dispose o a close, pero using llama a dispose automáticamente. El try catch es necesario porque using no controla excepciones.
-            using (var connection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;
-                                                Initial Catalog=pizzeria;
-                                                Integrated Security=True;
-                                                Connect Timeout=30;
-                                                Encrypt=False;
-                                                TrustServerCertificate=True;
-                                                ApplicationIntent=ReadWrite;
-                                                MultiSubnetFailover=False"))
+            // Insertar en tabla
+            using (SqlConnection connection = new SqlConnection (connectionString))
             {
+                connection.Open();
+
+                SqlCommand command = connection.CreateCommand();
+
+                SqlTransaction beginTransaction = connection.BeginTransaction("Transaction");
+
+                command.Connection = connection;
+                command.Transaction = beginTransaction;
                 try
                 {
-                    connection.Open();
+                    command.CommandText = "INSERT into Pizzas (Name, Price) VALUES ('Barbacoa', 5)";
+                    command.ExecuteNonQuery();
+                    command.CommandText = "INSERT into Pizzas (Name, Price) VALUES ('Marinera', 2)";
+                    command.ExecuteNonQuery();
 
-                    using (SqlCommand command = new SqlCommand(@"CREATE TABLE [Pizzas]
-                                                                ([ID] INT IDENTITY(1,1) NOT NULL CONSTRAINT pkPizzaId PRIMARY KEY, [Nombre] NVARCHAR(max) NOT NULL, [Precio] DECIMAL NOT NULL)", connection)) { command.ExecuteNonQuery(); }
-                    Console.WriteLine("Connection state:");
-                    Console.WriteLine(connection.State);
-                    Console.ReadLine();
-                    connection.Close();
-
+                    beginTransaction.Commit();
+                    Console.WriteLine("Success");
+                    //Console.ReadLine();
                 }
-                catch (SqlException e)
+                catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine("Commit Exception Type: {0}", e.GetType());
+                    Console.WriteLine("  Message: {0}", e.Message);
+                    Console.ReadLine();
                 }
             }
-           
+            //var fields = "Name, Price";
+            //var values = "'Barbacoa', 8";
+            //var insert = new Insert();
+            //insert.InsertData("Pizzas", fields, values);
+            //Console.WriteLine("Success");
+            //Console.ReadLine();
+
+
         }
 
     }

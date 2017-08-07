@@ -8,26 +8,22 @@ using System.Configuration;
 
 namespace ado.net
 {
-    public class createTable
+    public class CreateTable
     {
-        public void CreateTable(string tableName, string connectionString)
+        /// <summary>
+        /// Crea una tabla nueva.
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="connectionString"></param>
+        public void createTable(string tableName, string connectionString)
         {
             using (var connection = new SqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-                    Console.WriteLine("Connection state:");
-                    Console.WriteLine(connection.State);
-
-                    using (SqlCommand command = new SqlCommand(@"CREATE TABLE [dbo].['" + tableName + "']([ID] INT IDENTITY(1,1) NOT NULL CONSTRAINT pkPizzaId PRIMARY KEY)", connection)) { command.ExecuteNonQuery(); }
-                    Console.WriteLine("Connection state:");
-                    Console.WriteLine(connection.State);
-                    Console.ReadLine();
+                    using (SqlCommand command = new SqlCommand(@"CREATE TABLE [" + tableName + "]([ID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, [Name] NVARCHAR(max) NOT NULL, [Price] DECIMAL NOT NULL)", connection)) { command.ExecuteNonQuery(); }
                     connection.Close();
-                    Console.WriteLine(connection.State);
-                    Console.ReadLine();
-
                 }
                 catch (SqlException e)
                 {
