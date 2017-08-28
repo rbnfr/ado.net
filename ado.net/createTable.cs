@@ -22,7 +22,7 @@ namespace ado.net
                 try
                 {
                     connection.Open();
-                    using (SqlCommand command = new SqlCommand(@"CREATE TABLE [" + tableName + "]([ID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, [Name] NVARCHAR(max) NOT NULL, [Price] DECIMAL NOT NULL)", connection)) { command.ExecuteNonQuery(); }
+                    using (SqlCommand command = new SqlCommand(@"if not exists CREATE TABLE [" + tableName + "]([ID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, [Name] NVARCHAR(max) NOT NULL, [Price] DECIMAL NOT NULL)", connection)) { command.ExecuteNonQuery(); }
                     connection.Close();
                 }
                 catch (SqlException e)

@@ -21,11 +21,7 @@ namespace ado.net
             using (SqlConnection connection = new SqlConnection (connectionString))
             {
                 connection.Open();
-
-
-
                 SqlCommand command = connection.CreateCommand();
-
                 SqlTransaction beginTransaction = connection.BeginTransaction("Transaction");
 
                 // Se inicializa la propiedad transacción del comando.
